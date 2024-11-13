@@ -1,34 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:product_details/core/service/local_notification_service.dart';
+import 'package:product_details/core/utils/size_config.dart';
+import 'package:product_details/core/views/app_toast.dart';
 import 'package:product_details/core/views/buttons.dart';
-
-import '../../../../main.dart';
 
 class MessageSellerDialog extends StatelessWidget {
   const MessageSellerDialog({super.key});
-
-  Future<void> _showThankYouNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'your_channel_id', // Channel ID
-      'Your Channel Name', // Channel Name
-      // 'Your Channel Description',
-      importance: Importance.high,
-      priority: Priority.high,
-      showWhen: false,
-    );
-
-    const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(
-      0, // Notification ID
-      'Thank you', // Notification Title
-      'Thank you for Contacting Us', // Notification Body
-      platformChannelSpecifics,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +31,7 @@ class MessageSellerDialog extends StatelessWidget {
                 child: const Icon(Icons.close, color: Colors.grey),
               ),
             ),
-
+            SizeConfig(context).verticalSpaceSmall(),
             TextField(
               controller: messageController,
               maxLines: 3,
@@ -64,11 +42,17 @@ class MessageSellerDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             PrimaryButton(
-                label: 'Send  Message',
-                onPressed: () {
-                  _showThankYouNotification();
+              label: 'Send Message',
+              onPressed: () async {
+                if (messageController.text.trim().isEmpty) {
+                  showFailureToast('Please enter a message before sending.');
+                } else {
+                  // Send the message if the text field is not empty
+                  FirebaseAPI().sendFirebaseMessage('Thank you for Contacting Us');
                   context.maybePop();
-                })
+                }
+              },
+            ),
           ],
         ),
       ),

@@ -48,6 +48,11 @@ dependencies:
   flutter_html:
   flutter_rating_bar:
   floating_draggable_widget:
+  firebase_core:
+  firebase_messaging:
+  googleapis_auth:
+  shared_preferences:
+  fluttertoast:
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +78,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/
 
   fonts:
     - family: Poppins

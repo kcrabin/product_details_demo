@@ -1,26 +1,16 @@
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:product_details/core/service/local_notification_service.dart';
 
 import 'core/routes/app_routes.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-  //     AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
 
-  const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-
+  await Firebase.initializeApp();
+  await FirebaseAPI().initNotifications();
   runApp(ProviderScope(observers: [Logger()], child: AppWidget()));
 }
 
@@ -31,7 +21,6 @@ class AppWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Builder(builder: (context) {
       return MaterialApp.router(
         debugShowCheckedModeBanner: false,
@@ -45,8 +34,7 @@ class AppWidget extends ConsumerWidget {
                 color: Colors.white,
               )),
           primaryColor: const Color(0xFF254a92),
-          colorScheme:
-          ColorScheme.fromSeed(seedColor: const Color(0xFF254a92)),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF254a92)),
           fontFamily: 'Poppins',
           useMaterial3: true,
         ),
@@ -58,11 +46,11 @@ class AppWidget extends ConsumerWidget {
 class Logger extends ProviderObserver {
   @override
   void didUpdateProvider(
-      ProviderBase<Object?> provider,
-      Object? previousValue,
-      Object? newValue,
-      ProviderContainer container,
-      ) {
+    ProviderBase<Object?> provider,
+    Object? previousValue,
+    Object? newValue,
+    ProviderContainer container,
+  ) {
     print('''
 {
   "provider": "${provider.name ?? provider.runtimeType}",

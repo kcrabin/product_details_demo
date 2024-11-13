@@ -10,6 +10,7 @@ import '../notifiers/product_details_notifier.dart';
 import 'widgets/add_to_cart_section.dart';
 import 'widgets/message_seller_section.dart';
 import 'widgets/product_description_and_specification_section.dart';
+import 'widgets/product_details_shimmer.dart';
 import 'widgets/product_image_section.dart';
 import 'widgets/product_info_section.dart';
 import 'widgets/review_section.dart';
@@ -45,9 +46,7 @@ class ProductDetailsPage extends ConsumerWidget {
           ),
           body: productDetailsFetchState.map(
             initial: (value) => const Text(''),
-            loading: (value) => const Center(
-              child: CircularProgressIndicator(),
-            ),
+            loading: (value) => const ProductDetailsShimmer(),
             success: (value) {
               final Product productDetails = value.data;
               selectedVariant.value ??= productDetails.variantDetails.isNotEmpty
@@ -91,8 +90,8 @@ class ProductDetailsPage extends ConsumerWidget {
                 ),
               );
             },
-            failure: (value) => const Center(
-              child: Text('There is no data'),
+            failure: (value) =>  Center(
+              child: Text(value.failure),
             ),
           )), floatingWidget:  FloatingActionButton(
         onPressed: () {

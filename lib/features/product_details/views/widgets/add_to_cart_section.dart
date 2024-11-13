@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:product_details/core/views/app_toast.dart';
 import 'package:product_details/core/views/buttons.dart';
 
 Widget buildAddToCartSection(int? minOrder, int? maxOrder) {
@@ -25,7 +26,9 @@ Widget buildAddToCartSection(int? minOrder, int? maxOrder) {
                   if (maxOrder != null) {
                     if (quantity.value < maxOrder) {
                       quantity.value++;
-                    } else {}
+                    } else {
+                      showFailureToast('You cannot add more than $maxOrder Items');
+                    }
                   } else {
                     quantity.value++;
                   }
@@ -36,6 +39,7 @@ Widget buildAddToCartSection(int? minOrder, int? maxOrder) {
       Expanded(
         child: PrimaryButton(
           onPressed: () {
+            showToast('${quantity.value} Items  Added to Cart');
             // Add to cart logic
           },
           label: 'Add to Cart',

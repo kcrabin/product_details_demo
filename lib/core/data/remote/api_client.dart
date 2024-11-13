@@ -44,4 +44,29 @@ class ApiClient {
     }
   }
 
+  Future<dynamic> post(
+      String uri, {
+        // ignore: type_annotate_public_apis
+        data,
+        Map<String, dynamic>? queryParameters,
+        Options? options,
+      }) async {
+    try {
+      final response = await _dio.post(
+        uri,
+        data: data,
+        queryParameters: queryParameters,
+        options: options ?? Options(headers: {"requiresToken": false}),
+      );
+      return response.data;
+    } on SocketException catch (e) {
+      throw SocketException(e.toString());
+    } on FormatException catch (_) {
+      throw const FormatException("Unable to process the data");
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
 }

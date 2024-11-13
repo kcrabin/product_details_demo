@@ -21,7 +21,6 @@ class ProductDetailsRepositoryImpl implements ProductDetailsRepository {
       ApiClient client = ApiClient(
           baseUrl: 'https://api.melabazaar.com.np/api/v1/', dio: Dio());
 
-      //https://api.melabazaar.com.np/api/v1/items/product_list/realme-c30/?format=json
       bool isConnected = await checkInternetConnection();
       if (!isConnected) {
         return Left(noInternetConnection);
@@ -29,7 +28,7 @@ class ProductDetailsRepositoryImpl implements ProductDetailsRepository {
       final response = await client.get('items/product_list/$productName/',
           queryParameters: {'format': "json"});
       if (response == null || response['data'] == null) {
-        return Left("No product details found");
+        return const Left("No product details found");
       }
 
       final productData = response['data'];
@@ -38,7 +37,11 @@ class ProductDetailsRepositoryImpl implements ProductDetailsRepository {
 
       return Right(product);
     } catch (e) {
-      return Left(e.toString());
+      if(e is DioException) {
+        return Left("${e.message}");
+      }else{
+        return const Left('Something went wrong!');
+      }
     }
   }
 }
